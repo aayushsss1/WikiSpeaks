@@ -1,15 +1,14 @@
 import os
 import shutil
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
-from langchain_community.document_loaders import TextLoader, DirectoryLoader
+from langchain_community.embeddings import SentenceTransformerEmbeddings
 import time
-from langchain.document_loaders.text import TextLoader
 from langchain_community.vectorstores.faiss import FAISS
 from langchain.schema.document import Document
 import numpy as np
 from data_source import get_wikipedia_content
 
+FAISS_INDEX_PATH = os.path.dirname(os.path.realpath(__file__)) + "/faiss_index_fast"
 
 def get_text_chunks_langchain(text):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
@@ -25,14 +24,16 @@ def process_shard(shard):
     print(f'Shard completed in {et} seconds.')
     return result
 
-def persist_data(question, db_shards, FAISS_INDEX_PATH):
+def persist_data(question, db_shards):
     if os.path.exists(FAISS_INDEX_PATH):
       shutil.rmtree(FAISS_INDEX_PATH)
       print("Deleting FAISS Path")
    
     # Stage one: read all the docs, split them into chunks. 
     st = time.time() 
+    print(question)
     page_content = get_wikipedia_content(question)
+    print(page_content)
     chunks = get_text_chunks_langchain(page_content)
     et = time.time() - st
     print(f'Time taken: {et} seconds. {len(chunks)} chunks generated') 

@@ -7,6 +7,14 @@ from langchain_community.vectorstores.faiss import FAISS
 from langchain.schema.document import Document
 import numpy as np
 from data_source import get_wikipedia_content
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class Context(BaseModel):
+    context: str
+    db_shards: int
 
 FAISS_INDEX_PATH = os.path.dirname(os.path.realpath(__file__)) + "/faiss_index_fast"
 
@@ -24,25 +32,26 @@ def process_shard(shard):
     print(f'Shard completed in {et} seconds.')
     return result
 
-def persist_data(question, db_shards):
+@app.post("/persist/")
+def persist_data(context: Context):
+    context_dict = context.model_dump()
     if os.path.exists(FAISS_INDEX_PATH):
       shutil.rmtree(FAISS_INDEX_PATH)
       print("Deleting FAISS Path")
    
     # Stage one: read all the docs, split them into chunks. 
     st = time.time() 
-    print(question)
-    page_content = get_wikipedia_content(question)
+    page_content = get_wikipedia_content(context_dict["context"])
     print(page_content)
     chunks = get_text_chunks_langchain(page_content)
     et = time.time() - st
     print(f'Time taken: {et} seconds. {len(chunks)} chunks generated') 
 
     #Stage two: embed the docs. 
-    print(f'Loading chunks into vector store ... using {db_shards} shards') 
+    print(f'Loading chunks into vector store ... using {context_dict["db_shards"]} shards') 
     st = time.time()
-    shards = np.array_split(chunks, db_shards)
-    results = [process_shard(shards[i]) for i in range(db_shards)]
+    shards = np.array_split(chunks, context_dict["db_shards"])
+    results = [process_shard(shards[i]) for i in range(context_dict["db_shards"])]
     et = time.time() - st
     print(f'Shard processing complete. Time taken: {et} seconds.')
 
@@ -50,7 +59,7 @@ def persist_data(question, db_shards):
     print('Merging shards ...')
     # Straight serial merge of others into results[0]
     db = results[0]
-    for i in range(1,db_shards):
+    for i in range(1, context_dict["db_shards"]):
         db.merge_from(results[i])
     et = time.time() - st
     print(f'Merged in {et} seconds.') 

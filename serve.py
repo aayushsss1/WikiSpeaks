@@ -1,9 +1,6 @@
-from starlette.requests import Request
 from ray import serve
 import ray
 from langchain.vectorstores import FAISS
-from langchain.llms import OpenAI
-from langchain.chains.question_answering import load_qa_chain
 from transformers import pipeline
 import torch
 import time
@@ -53,7 +50,7 @@ class QADeployment(Model):
         prompt = self.pipe.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
         outputs = self.pipe(prompt, max_new_tokens=256, do_sample=True, temperature=0.7, top_k=50, top_p=0.95)
         
-        return outputs[0]["generated_text"]
+        return {"predictions": outputs[0]["generated_text"]}
 
 
 if __name__ == "__main__":

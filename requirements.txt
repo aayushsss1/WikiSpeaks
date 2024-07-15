@@ -4,3 +4,8 @@ streamlit>=1.36.0
 ray>=2.7.1
 sentence-transformers>=2.2.2
 faiss-cpu>=1.8.0
+openai
+langchain_openai
+langchain_community
+langchain_core
+wikipedia

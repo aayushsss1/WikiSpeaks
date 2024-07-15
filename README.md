@@ -1,1 +1,1 @@
-# Wikipedia-Chat-Assistant
+# WikiSpeaks

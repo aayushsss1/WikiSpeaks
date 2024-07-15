@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wiki-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wiki-app
+  template:
+    metadata:
+      labels:
+        app: wiki-app
+    spec:
+      containers:
+        - name: wiki-app-container
+          image: aayushsubramaniam/wikispeaks:v2  # Replace with your container image
+          env:
+          - name: INGRESS_PORT
+            valueFrom:
+              secretKeyRef:
+                name: wiki-secret
+                key: INGRESS_PORT
+          - name: INGRESS_HOST
+            valueFrom:
+              secretKeyRef:
+                name: wiki-secret
+                key: INGRESS_HOST
+          - name: SERVICE_HOSTNAME
+            valueFrom:
+              secretKeyRef:
+                name: wiki-secret
+                key: SERVICE_HOSTNAME
+          - name: SENTENCE_TRANSFORMERS_HOME
+            value: "./.cache"
+          - name: HF_HOME
+            value: "./.cache"
+          - name: TOKENIZERS_PARALLELISM
+            value: "false"
+          ports:
+            - containerPort: 8501
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wiki-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8501
+      protocol: TCP
+  selector:
+    app: wiki-app
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wiki-secret
+type: Opaque
+stringData:
+  INGRESS_PORT: "<INGRESS_PORT>"
+  INGRESS_HOST: "<INGRESS_HOST>" 
+  SERVICE_HOSTNAME: "<SERVICE_HOSTNAME>"

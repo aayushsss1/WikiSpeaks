@@ -32,8 +32,6 @@ def prompt(question):
 
     retriever = db.as_retriever(search_kwargs={"k": 4}, search_type="mmr")
 
-    docs = retriever.invoke(question)
-
     client = OpenAI(
         base_url=base_url,
         api_key=api_key,

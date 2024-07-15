@@ -1,5 +1,6 @@
 import streamlit as st
 from prompt import prompt
+from persist import persist_data
 
 def stick_header():
     # make header sticky.
@@ -24,7 +25,7 @@ def stick_header():
 container =  st.container()
 
 with container:
-    st.markdown("# Wiki Chat")
+    st.markdown("# WikiSpeaks")
     stick_header()
 
 # Initialize chat history
@@ -37,18 +38,18 @@ for message in st.session_state.wikimsg:
         st.markdown(message["content"])
 
 # React to user input
-if ques := st.chat_input("Post your query!"):
+if question := st.chat_input("Post your query!"):
 # Display user message in chat message container
-    st.chat_message("human").markdown(ques)
+    st.chat_message("human").markdown(question)
 # Add user message to chat history
-    st.session_state.wikimsg.append({"role": "human", "content": ques})
+    st.session_state.wikimsg.append({"role": "human", "content": question})
 
-    with st.spinner("Wait for it..."):
-        answer = prompt(ques)
+    with st.spinner("Please wait..."):
+        persist_data(question)
+        answer = prompt(question)
 
-    response = f"{answer}"
 # Display assistant response in chat message container
     with st.chat_message("ai"):
-        st.markdown(response)
+        response = st.write_stream(answer)
 # Add assistant response to chat history
     st.session_state.wikimsg.append({"role": "ai", "content": response})

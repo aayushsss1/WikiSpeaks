@@ -2,3 +2,4 @@ env
 __pycache__
 client-env
 runtime.txt
+faiss_index

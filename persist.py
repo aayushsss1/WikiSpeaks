@@ -8,9 +8,9 @@ from langchain.schema.document import Document
 import numpy as np
 from data_source import get_wikipedia_content
 
-FAISS_INDEX_PATH = os.path.dirname(os.path.realpath(__file__)) + "/faiss_index_fast"
+FAISS_INDEX_PATH = os.path.dirname(os.path.realpath(__file__)) + "/faiss_index"
 
-db_shards = 10
+db_shards = 5
 
 def get_text_chunks_langchain(text):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)

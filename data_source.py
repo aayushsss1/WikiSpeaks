@@ -1,30 +1,13 @@
-from langchain_community.tools import WikipediaQueryRun
-from langchain_community.utilities import WikipediaAPIWrapper
-import requests
 import wikipedia
-from bs4 import BeautifulSoup
 
 def get_wikipedia_content(search):
-    # set language to English (default is auto-detect)
-    lang = "en"
-
-    # create URL based on user input and language
-    url = f"https://{lang}.wikipedia.org/wiki/{search}"
-
-    # send GET request to URL and parse HTML content
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, "html.parser")
-
-    # extract main content of page
-    content_div = soup.find(id="mw-content-text")
-
-    # extract all paragraphs of content
-    paras = content_div.find_all('p')
-
-    # concatenate paragraphs into full page content
-    full_page_content = ""
-    for para in paras:
-        full_page_content += para.text
-
-    # print the full page content
-    return full_page_content
+    wikipedia.set_lang("en")
+    page_titles = wikipedia.search(search, results = 4) 
+    summaries = []
+    for page_title in page_titles[:4]:
+        if wiki_page := wikipedia.page(title=page_title, auto_suggest=False):
+            if summary := wiki_page.summary:
+                summaries.append(summary)
+    if not summaries:
+        return "Sorry, nothing found on Wikipedia!"
+    return "\n\n".join(summaries)

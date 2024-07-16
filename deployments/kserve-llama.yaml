@@ -41,6 +41,8 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   name: huggingface-llama2
+  annotations:
+    serving.kserve.io/enable-prometheus-scraping: "true"
 spec:
   predictor:
     model:

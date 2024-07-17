@@ -7,6 +7,7 @@ from langchain_community.vectorstores.faiss import FAISS
 from langchain.schema.document import Document
 import numpy as np
 from data_source import get_wikipedia_content
+import ray
 
 FAISS_INDEX_PATH = os.path.dirname(os.path.realpath(__file__)) + "/faiss_index"
 
@@ -17,6 +18,7 @@ def get_text_chunks_langchain(text):
     docs = [Document(page_content=x) for x in text_splitter.split_text(text)]
     return docs
 
+@ray.remote
 def process_shard(shard):
     print(f'Starting process_shard of {len(shard)} chunks.')
     st = time.time()
@@ -27,6 +29,7 @@ def process_shard(shard):
     return result
 
 def persist_data(context):
+    ray.init(ignore_reinit_error=True)
     if os.path.exists(FAISS_INDEX_PATH):
       shutil.rmtree(FAISS_INDEX_PATH)
       print("Deleting FAISS Path")
@@ -43,7 +46,8 @@ def persist_data(context):
     print(f'Loading chunks into vector store ... using {db_shards} shards') 
     st = time.time()
     shards = np.array_split(chunks, db_shards)
-    results = [process_shard(shards[i]) for i in range(db_shards)]
+    futures = [process_shard.remote(shards[i]) for i in range(db_shards)]
+    results = results = ray.get(futures)
     et = time.time() - st
     print(f'Shard processing complete. Time taken: {et} seconds.')
 
@@ -61,4 +65,5 @@ def persist_data(context):
     db.save_local(FAISS_INDEX_PATH)
     et = time.time() - st
     print(f'Saved in: {et} seconds.')
+    ray.shutdown()
     

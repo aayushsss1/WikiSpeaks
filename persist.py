@@ -47,7 +47,7 @@ def persist_data(context):
     st = time.time()
     shards = np.array_split(chunks, db_shards)
     futures = [process_shard.remote(shards[i]) for i in range(db_shards)]
-    results = results = ray.get(futures)
+    results = ray.get(futures)
     et = time.time() - st
     print(f'Shard processing complete. Time taken: {et} seconds.')
 

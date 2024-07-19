@@ -1,1 +1,1 @@
-# WikiSpeaks - A Scalable RAG-based Wikipedia Chat Assistant
+# WikiSpeaks - A Scalable RAG-based Wikipedia Assistant

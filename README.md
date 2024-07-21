@@ -32,7 +32,7 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 
 ## Setup
 
-### KServe
+### KServe <a name = "kserve"></a>
 
 Install KServe on your cluster using the KServe Quick installation script - 
 
@@ -81,7 +81,7 @@ curl -v http://${INGRESS_HOST}:${INGRESS_PORT}/openai/v1/completions \
 
 Your model is now ready for use!
 
-### Application
+### Application <a name = "application"></a>
 
 For the application, a Streamlit frontend provides a nice, interactive interface for users to input their questions and receive informative answers — you don't have to scour through Wikipedia pages anymore!
 

@@ -32,7 +32,7 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 
 ## Setup
 
-### KServe
+## KServe
 
 Install KServe on your cluster using the KServe Quick installation script - 
 
@@ -47,7 +47,7 @@ export HF_TOKEN={your_token}
 kubectl create secret generic hf-token --from-literal=hf-token="$HF_TOKEN"
 ```
 
-Now deploy the the Llama 2 Chat model for text generation from HuggingFace by deploying the InferenceService resource on your cluster -
+Now deploy the the Llama 2 Chat model by deploying the InferenceService resource on your cluster -
 
 ```
 kubectl apply -f deployments/kserve-llama.yaml
@@ -81,7 +81,7 @@ curl -v http://${INGRESS_HOST}:${INGRESS_PORT}/openai/v1/completions \
 
 Your model is now ready for use!
 
-### Application
+## Application
 
 For the application, a Streamlit frontend provides a nice, interactive interface for users to input their questions and receive informative answers — you don't have to scour through Wikipedia pages anymore!
 

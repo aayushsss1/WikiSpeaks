@@ -51,11 +51,8 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 - Python 3.9+
 
 ## Setup
-
-Follow the below steps to inference the LLM and setup the streamlit application on an environment of your choice!
-
 ### KServe
--------------
+
 #### **Installation**
 
 Install KServe on your cluster using the KServe Quick installation script - 
@@ -107,8 +104,10 @@ curl -v http://${INGRESS_HOST}:${INGRESS_PORT}/openai/v1/completions \
 
 Your model is now ready for use!
 
-### Application
 ----------
+
+### Application
+
 For the application, a Streamlit frontend provides a nice, interactive interface for users to input their questions and receive informative answers — you don't have to scour through Wikipedia pages anymore!
 
 
@@ -151,3 +150,5 @@ docker run -p 8080:8051 -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_P
 ```
 
 Run the application on localhost:8051 on your web browser.
+
+----------

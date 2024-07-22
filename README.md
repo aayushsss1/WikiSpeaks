@@ -43,7 +43,7 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 
 ## Demo
 
-[![Demo]()](/media/app-demo.mov)
+![Demo](/media/app-video.mp4)
 
 ## Prerequisites
 
@@ -94,8 +94,10 @@ Wait for ~ 5 - 10 minutes, you should see the status `READY=TRUE`
 In order to check if you can inference successfully we shall perform a sample inference using OpenAI's `/v1/completions` endpoint.
 
 ```
-export INGRESS_IP=
-export INGRESS_HOST=
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
+
+export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
 export SERVICE_HOSTNAME=$(kubectl get inferenceservice huggingface-llama2 -o jsonpath='{.status.url}' | cut -d "/" -f 3)
 ```
 
@@ -147,7 +149,7 @@ docker build -t wikispeaks:v1 .
 To start the application run - 
 
 ```
-docker run -p 8080:8051 -e $INGRESS_HOST -e $INGRESS_IP -e $SERVICE_HOSTNAME wikispeaks:v1
+docker run -p 8080:8051 -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_PORT -e SERVICE_HOSTNAME=$SERVICE_HOSTNAME wikispeaks:v1
 ```
 
 Run the application on localhost:8051 on your web browser.

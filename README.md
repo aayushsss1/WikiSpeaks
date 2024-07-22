@@ -3,15 +3,34 @@
 A highly scalable chat assistant that provides real-time Wikipedia information using the `Llama-2-7b-chat` LLM, inferenced
 with Kserve for high concurrency, monitored using Prometheus and implemented on a user-friendly Streamlit interface
 
+## Table of Contents
+
++ [Architecture Overview](#arch)
+    + [Model Inferencing](#1-model-inferencing)
+    + [Application](#2-application)
+    + [Monitoring](#3-monitoring)
++ [Demo](#demo)
++ [Prerequisites](#prerequisites)
++ [Setup](#setup)
+    + [KServe](#kserve)
+        + [Installation](#installation)
+        + [InferenceService](#check-inferenceservice-status)
+        + [Inference Request](#perform-model-inference)
+    + [Application](#application)
+        + [Local Deployment](#local-deployment)
+        + [Docker Deployment](#docker-deployment)
+        + [Kubernetes Deployment]()
+
+
 ## Architecture Overview
 
 This Project consists of 3 main components - 
 
-### 1. Model Inferencing 
+### 1. Model Inferencing
 
 The `llama-2-7b-chat-hf` model is inferenced using KServe, a standard, cloud agnostic Model Inference Platform on Kubernetes.
 
-### 2. Application - 
+### 2. Application
 
 - **Data Source**: The Wikipedia python library scrapes text data from Wikipedia Pages based on the user's question.
 
@@ -19,7 +38,7 @@ The `llama-2-7b-chat-hf` model is inferenced using KServe, a standard, cloud agn
 
 - **Prompt**: By utilizing the Langchain wrapper for OpenAI chat completion models, we can infer the hosted Llama model in our Retrieval Augmented Generation (RAG) approach -- using the context from the stored FAISS index and the user's question.
 
-### 3. Monitoring 
+### 3. Monitoring
 To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prometheus-scraping` to the InferenceService YAML. With the exported metrics (inference latency, explain request latency etc.), they can now be visualised on Grafana.
 
 ## Demo
@@ -32,7 +51,11 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 
 ## Setup
 
-### KServe <a name = "kserve"></a>
+Follow the below steps to inference the LLM and setup the streamlit application on an environment of your choice!
+
+### KServe
+-------------
+#### **Installation**
 
 Install KServe on your cluster using the KServe Quick installation script - 
 
@@ -55,7 +78,8 @@ kubectl apply -f deployments/kserve-llama.yaml
 
 Note - The KServe HuggingFace runtime by default uses vLLM to serve the LLM models for faster time-to-first-token(TTFT) and higher token generation throughput. If the model is not supported by vLLM, KServe falls back to HuggingFace backend as a failsafe.
 
-**Check InferenceService status** - 
+
+#### **Check InferenceService status**
 
 ```
 kubectl get inferenceservices huggingface-llama2
@@ -63,7 +87,8 @@ kubectl get inferenceservices huggingface-llama2
 
 Wait for ~ 5 - 10 minutes, you should see the status `READY=TRUE`
 
-**Perform Model Inference** - 
+
+#### **Perform Model Inference**
 
 In order to check if you can inference successfully we shall perform a sample inference using OpenAI's `/v1/completions` endpoint.
 
@@ -81,9 +106,10 @@ curl -v http://${INGRESS_HOST}:${INGRESS_PORT}/openai/v1/completions \
 
 Your model is now ready for use!
 
-### Application <a name = "application"></a>
-
+### Application
+----------
 For the application, a Streamlit frontend provides a nice, interactive interface for users to input their questions and receive informative answers — you don't have to scour through Wikipedia pages anymore!
+
 
 #### **Local Deployment**
 
@@ -108,7 +134,8 @@ pip install -r requirements.txt
 /env/bin/streamlit run app.py
 ```
 
-#### **Docker Deployment** 
+
+#### **Docker Deployment**
 
 A Dockerfile is provided to build your own image of the application, to do so run -
 

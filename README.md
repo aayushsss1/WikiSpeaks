@@ -43,6 +43,7 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 
 ## Demo
 
+[![Demo]()](/media/app-demo.mov)
 
 ## Prerequisites
 

@@ -5,7 +5,7 @@ with Kserve for high concurrency, monitored using Prometheus and implemented on 
 
 ## Table of Contents
 
-+ [Architecture Overview](#arch)
++ [Architecture Overview](#architecture-overview)
     + [Model Inferencing](#1-model-inferencing)
     + [Application](#2-application)
     + [Monitoring](#3-monitoring)
@@ -17,9 +17,10 @@ with Kserve for high concurrency, monitored using Prometheus and implemented on 
         + [InferenceService](#check-inferenceservice-status)
         + [Inference Request](#perform-model-inference)
     + [Application](#application)
-        + [Local Deployment](#local-deployment)
-        + [Docker Deployment](#docker-deployment)
-        + [Kubernetes Deployment]()
+        + [Local Deployment](#a-local-deployment)
+        + [Docker Deployment](#b-docker-deployment)
+        + [Kubernetes Deployment](#c-kubernetes-deployment)
++ [Monitoring](#monitoring)
 
 
 ## Architecture Overview
@@ -107,8 +108,6 @@ curl -v http://${INGRESS_HOST}:${INGRESS_PORT}/openai/v1/completions \
 ```
 
 Your model is now ready for use!
-
-----------
 
 ### 2. Application
 

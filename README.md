@@ -114,7 +114,7 @@ Your model is now ready for use!
 <br>
 ### **2. Application**
 For the application, a Streamlit frontend provides a nice, interactive interface for users to input their questions and receive informative answers — you don't have to scour through Wikipedia pages anymore!
-
+<br>
 
 ### a. Local Deployment
 
@@ -138,7 +138,7 @@ pip install -r requirements.txt
 ```
 /env/bin/streamlit run app.py
 ```
-
+<br>
 
 ### b. Docker Deployment
 
@@ -156,7 +156,7 @@ docker run -p 8080:8051 -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_P
 
 Run the application on localhost:8080 on your web browser.
 <br>
-
+<br>
 ### c. Kubernetes Deployment
 
 A Kubernetes deployment file is provided to host your application on a K8s cluster -

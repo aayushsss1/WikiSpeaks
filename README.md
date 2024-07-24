@@ -149,6 +149,28 @@ To start the application run -
 docker run -p 8080:8051 -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_PORT -e SERVICE_HOSTNAME=$SERVICE_HOSTNAME wikispeaks:v1
 ```
 
-Run the application on localhost:8051 on your web browser.
+Run the application on localhost:8080 on your web browser.
 
 ----------
+
+#### **Kubernetes Deployment**
+
+A Dockerfile is provided to build your own image of the application, to do so run -
+
+```
+docker build -t wikispeaks:v1 .
+```
+
+To start the application run - 
+
+```
+docker run -p 8080:8051 -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_PORT -e SERVICE_HOSTNAME=$SERVICE_HOSTNAME wikispeaks:v1
+```
+
+Run the application on localhost:8080 on your web browser.
+
+----------
+
+## Monitoring
+
+## Contributions

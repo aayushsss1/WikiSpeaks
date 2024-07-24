@@ -177,11 +177,10 @@ kubectl get svc wiki-service
 
 Access the application using the external IP of the load balancer service on your web browser!
 
-----------
 
 ## Monitoring
 
-Prometheus and Grafana are used to monitor the performance of the deployed model and application
+Prometheus and Grafana are used to monitor the performance of the deployed model and application. For this application, I've just visualised the inferencing latency, but there are many [other](https://kserve.github.io/website/latest/modelserving/observability/prometheus_metrics/) metrics than can be visualised.
 
 #### 1. Enable Prometheus Metrics
 
@@ -189,10 +188,43 @@ On adding the `serving.kserve.io/enable-prometheus-scraping: "true"` annotation 
 
 #### 2. Setup Prometheus
 
-Follow the Kserve [guide](https://github.com/kserve/kserve/tree/master/docs/samples/metrics-and-monitoring) to setup Prometheus
+Follow the Kserve [guide](https://github.com/kserve/kserve/tree/master/docs/samples/metrics-and-monitoring) to setup Prometheus using the Prometheus Operator
+
+Once setup, to access the scraped metrics, port forward the Prometheus Service - 
+
+```
+kubectl port-forward service/prometheus-operated -n kfserving-monitoring 9090:9090
+```
+
+To measure the model requests, inference the llama model from the application, the request latency metric can be captured on prometheus as shown below - 
+
+<div align = "center">
+<kbd>
+<img src="media/prometheus.png" alt="alt text" width="470" height="260"/>
+</kbd>
+</div>
 
 
 #### 3. Setup Grafana
+
+The captured prometheus metrics can be visualised better on Grafana, follow the Grafana installation [guide](https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/) to install and configure Grafana on your Kubernetes cluster
+
+Open the Grafana dashboard by port-forwarding the service - 
+
+```
+kubectl port-forward service/grafana 3000:3000 --namespace=my-grafana
+```
+
+Add Prometheus as a data-source and ensure you utilise the external IP of the prometheus service!
+
+You can then visualise a bunch of metrics scraped by Prometheus, exported from kserve.
+
+<div align = "center">
+<kbd>
+<img src="media/grafana-dashboard.png" alt="alt text" width="470" height="260"/>
+</kbd>
+</div>
+
 
 ## Contributions
 

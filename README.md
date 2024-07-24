@@ -11,15 +11,14 @@ with Kserve for high concurrency, monitored using Prometheus and implemented on 
     + [Monitoring](#3-monitoring)
 + [Demo](#demo)
 + [Prerequisites](#prerequisites)
-+ [Setup](#setup)
-    + [KServe](#kserve)
-        + [Installation](#installation)
-        + [InferenceService](#check-inferenceservice-status)
-        + [Inference Request](#perform-model-inference)
-    + [Application](#application)
-        + [Local Deployment](#a-local-deployment)
-        + [Docker Deployment](#b-docker-deployment)
-        + [Kubernetes Deployment](#c-kubernetes-deployment)
++ [KServe](#kserve)
+    + [Installation](#installation)
+    + [InferenceService](#check-inferenceservice-status)
+    + [Inference Request](#perform-model-inference)
++ [Application](#application)
+    + [Local Deployment](#a-local-deployment)
+    + [Docker Deployment](#b-docker-deployment)
+    + [Kubernetes Deployment](#c-kubernetes-deployment)
 + [Monitoring](#monitoring)
 
 
@@ -57,10 +56,9 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 - Kubernetes Cluster (recommend 16 cpu x 64 Gb RAM x 1 Nvidia GPU per worker node )
 - Python 3.9+
 
-## Setup
-### **1. KServe**
+## KServe
 
-### Installation
+### **Installation**
 
 Install KServe on your cluster using the KServe Quick installation script - 
 
@@ -68,7 +66,7 @@ Install KServe on your cluster using the KServe Quick installation script -
 curl -s "https://raw.githubusercontent.com/kserve/kserve/release-0.13/hack/quick_install.sh" | bash
 ```
 
-Ensure you accept the terms and conditions of the `llama-2-7b-chat-hf` repository on huggingface in order to use the LLM. Once you have the required permissions, copy paste the API Key into a Kubernetes Secret - 
+<ins>Ensure</ins> you accept the terms and conditions of the `llama-2-7b-chat-hf` repository on huggingface in order to use the LLM. Once you have the required permissions, copy paste the API Key into a Kubernetes Secret - 
 
 ```
 export HF_TOKEN={your_token}
@@ -84,7 +82,8 @@ kubectl apply -f deployments/kserve-llama.yaml
 Note - The KServe HuggingFace runtime by default uses vLLM to serve the LLM models for faster time-to-first-token(TTFT) and higher token generation throughput. If the model is not supported by vLLM, KServe falls back to HuggingFace backend as a failsafe.
 <br>
 <br>
-### Check InferenceService status
+
+### **Check InferenceService status**
 
 ```
 kubectl get inferenceservices huggingface-llama2
@@ -93,7 +92,8 @@ kubectl get inferenceservices huggingface-llama2
 Wait for ~ 5 - 10 minutes, you should see the status `READY=TRUE`
 <br>
 <br>
-### Perform Model Inference
+
+### **Perform Model Inference**
 
 In order to check if you can inference successfully we shall perform a sample inference using OpenAI's `/v1/completions` endpoint.
 
@@ -112,11 +112,12 @@ curl -v http://${INGRESS_HOST}:${INGRESS_PORT}/openai/v1/completions \
 Your model is now ready for use!
 <br>
 <br>
-### **2. Application**
+
+## Application
 For the application, a Streamlit frontend provides a nice, interactive interface for users to input their questions and receive informative answers — you don't have to scour through Wikipedia pages anymore!
 <br>
 
-### a. Local Deployment
+### **a. Local Deployment**
 
 To deploy the application locally - 
 
@@ -138,9 +139,12 @@ pip install -r requirements.txt
 ```
 /env/bin/streamlit run app.py
 ```
+
+The application will now run on your localhost!
 <br>
 
-### b. Docker Deployment
+
+### **b. Docker Deployment**
 
 A Dockerfile is provided to build your own image of the application, to do so run -
 
@@ -156,8 +160,8 @@ docker run -p 8080:8051 -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_P
 
 Run the application on localhost:8080 on your web browser.
 <br>
-<br>
-### c. Kubernetes Deployment
+
+### **c. Kubernetes Deployment**
 
 A Kubernetes deployment file is provided to host your application on a K8s cluster -
 

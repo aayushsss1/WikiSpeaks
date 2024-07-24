@@ -56,7 +56,6 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 
 - Kubernetes Cluster (recommend 16 cpu x 64 Gb RAM x 1 Nvidia GPU per worker node )
 - Python 3.9+
-<br>
 
 ## Setup
 ### **1. KServe**

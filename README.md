@@ -41,6 +41,7 @@ The `llama-2-7b-chat-hf` model is inferenced using KServe, a standard, cloud agn
 
 ### 3. Monitoring
 To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prometheus-scraping` to the InferenceService YAML. With the exported metrics (inference latency, explain request latency etc.), they can now be visualised on Grafana.
+<br>
 
 ## Demo
 
@@ -49,11 +50,13 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 <img src="media/app-video.gif" alt="alt text" width="800"/>
 </kbd>
 </div>
+<br>
 
 ## Prerequisites
 
 - Kubernetes Cluster (recommend 16 cpu x 64 Gb RAM x 1 Nvidia GPU per worker node )
 - Python 3.9+
+<br>
 
 ## Setup
 ### **1. KServe**
@@ -80,8 +83,8 @@ kubectl apply -f deployments/kserve-llama.yaml
 ```
 
 Note - The KServe HuggingFace runtime by default uses vLLM to serve the LLM models for faster time-to-first-token(TTFT) and higher token generation throughput. If the model is not supported by vLLM, KServe falls back to HuggingFace backend as a failsafe.
-
-
+<br>
+<br>
 ### Check InferenceService status
 
 ```
@@ -89,8 +92,8 @@ kubectl get inferenceservices huggingface-llama2
 ```
 
 Wait for ~ 5 - 10 minutes, you should see the status `READY=TRUE`
-
-
+<br>
+<br>
 ### Perform Model Inference
 
 In order to check if you can inference successfully we shall perform a sample inference using OpenAI's `/v1/completions` endpoint.
@@ -108,7 +111,8 @@ curl -v http://${INGRESS_HOST}:${INGRESS_PORT}/openai/v1/completions \
 ```
 
 Your model is now ready for use!
-
+<br>
+<br>
 ### **2. Application**
 For the application, a Streamlit frontend provides a nice, interactive interface for users to input their questions and receive informative answers — you don't have to scour through Wikipedia pages anymore!
 
@@ -152,7 +156,7 @@ docker run -p 8080:8051 -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_P
 ```
 
 Run the application on localhost:8080 on your web browser.
-
+<br>
 
 ### c. Kubernetes Deployment
 

@@ -56,9 +56,9 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 - Python 3.9+
 
 ## Setup
-### 1. KServe
+### **1. KServe**
 
-### **Installation**
+### Installation
 
 Install KServe on your cluster using the KServe Quick installation script - 
 
@@ -82,7 +82,7 @@ kubectl apply -f deployments/kserve-llama.yaml
 Note - The KServe HuggingFace runtime by default uses vLLM to serve the LLM models for faster time-to-first-token(TTFT) and higher token generation throughput. If the model is not supported by vLLM, KServe falls back to HuggingFace backend as a failsafe.
 
 
-### **Check InferenceService status**
+### Check InferenceService status
 
 ```
 kubectl get inferenceservices huggingface-llama2
@@ -91,7 +91,7 @@ kubectl get inferenceservices huggingface-llama2
 Wait for ~ 5 - 10 minutes, you should see the status `READY=TRUE`
 
 
-### **Perform Model Inference**
+### Perform Model Inference
 
 In order to check if you can inference successfully we shall perform a sample inference using OpenAI's `/v1/completions` endpoint.
 
@@ -109,12 +109,11 @@ curl -v http://${INGRESS_HOST}:${INGRESS_PORT}/openai/v1/completions \
 
 Your model is now ready for use!
 
-### 2. Application
-
+### **2. Application**
 For the application, a Streamlit frontend provides a nice, interactive interface for users to input their questions and receive informative answers — you don't have to scour through Wikipedia pages anymore!
 
 
-### **a. Local Deployment**
+### a. Local Deployment
 
 To deploy the application locally - 
 
@@ -138,7 +137,7 @@ pip install -r requirements.txt
 ```
 
 
-### **b. Docker Deployment**
+### b. Docker Deployment
 
 A Dockerfile is provided to build your own image of the application, to do so run -
 
@@ -155,7 +154,7 @@ docker run -p 8080:8051 -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_P
 Run the application on localhost:8080 on your web browser.
 
 
-### **c. Kubernetes Deployment**
+### c. Kubernetes Deployment
 
 A Kubernetes deployment file is provided to host your application on a K8s cluster -
 

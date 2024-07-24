@@ -43,7 +43,11 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 
 ## Demo
 
-![Demo](/media/app-video.mp4)
+<div align = "center">
+<kbd>
+<img src="media/app-video.gif" alt="alt text" width="800"/>
+</kbd>
+</div>
 
 ## Prerequisites
 
@@ -51,7 +55,7 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 - Python 3.9+
 
 ## Setup
-### KServe
+### 1. KServe
 
 #### **Installation**
 
@@ -106,7 +110,7 @@ Your model is now ready for use!
 
 ----------
 
-### Application
+### 2. Application
 
 For the application, a Streamlit frontend provides a nice, interactive interface for users to input their questions and receive informative answers — you don't have to scour through Wikipedia pages anymore!
 
@@ -155,22 +159,46 @@ Run the application on localhost:8080 on your web browser.
 
 #### **Kubernetes Deployment**
 
-A Dockerfile is provided to build your own image of the application, to do so run -
+A Kubernetes deployment file is provided to host your application on a K8s cluster -
 
 ```
-docker build -t wikispeaks:v1 .
+kubectl apply -f deployments/app-deployment.yaml
 ```
 
-To start the application run - 
+**Note:** Please ensure to update the values of the environment variables in the secret before applying the deployment.
+
+Ensure the deployment, pods and service are all up and running
 
 ```
-docker run -p 8080:8051 -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_PORT -e SERVICE_HOSTNAME=$SERVICE_HOSTNAME wikispeaks:v1
+kubectl get deployment wiki-app-deployment
+kubectl get pod | grep wiki-app
+kubectl get svc wiki-service
 ```
 
-Run the application on localhost:8080 on your web browser.
+Access the application using the external IP of the load balancer service on your web browser!
 
 ----------
 
 ## Monitoring
 
+Prometheus and Grafana are used to monitor the performance of the deployed model and application
+
+#### 1. Enable Prometheus Metrics
+
+On adding the `serving.kserve.io/enable-prometheus-scraping: "true"` annotation to the InferenceService YAML, the kserve container exports it's custom metrics to the prometheus server, which can be visualised on a Grafana Dashboard.
+
+#### 2. Setup Prometheus
+
+Follow the Kserve [guide](https://github.com/kserve/kserve/tree/master/docs/samples/metrics-and-monitoring) to setup Prometheus
+
+
+#### 3. Setup Grafana
+
 ## Contributions
+
+Any contributions are welcome! Please raise an issue or PR, and I'll address them as soon as possible!
+
+## Future Work
+
+- Ray Operator 
+- Custom Kserve model deployment

@@ -58,7 +58,7 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 ## Setup
 ### 1. KServe
 
-#### **Installation**
+### **Installation**
 
 Install KServe on your cluster using the KServe Quick installation script - 
 
@@ -82,7 +82,7 @@ kubectl apply -f deployments/kserve-llama.yaml
 Note - The KServe HuggingFace runtime by default uses vLLM to serve the LLM models for faster time-to-first-token(TTFT) and higher token generation throughput. If the model is not supported by vLLM, KServe falls back to HuggingFace backend as a failsafe.
 
 
-#### **Check InferenceService status**
+### **Check InferenceService status**
 
 ```
 kubectl get inferenceservices huggingface-llama2
@@ -91,7 +91,7 @@ kubectl get inferenceservices huggingface-llama2
 Wait for ~ 5 - 10 minutes, you should see the status `READY=TRUE`
 
 
-#### **Perform Model Inference**
+### **Perform Model Inference**
 
 In order to check if you can inference successfully we shall perform a sample inference using OpenAI's `/v1/completions` endpoint.
 
@@ -114,7 +114,7 @@ Your model is now ready for use!
 For the application, a Streamlit frontend provides a nice, interactive interface for users to input their questions and receive informative answers — you don't have to scour through Wikipedia pages anymore!
 
 
-#### **a. Local Deployment**
+### **a. Local Deployment**
 
 To deploy the application locally - 
 
@@ -138,7 +138,7 @@ pip install -r requirements.txt
 ```
 
 
-#### **b. Docker Deployment**
+### **b. Docker Deployment**
 
 A Dockerfile is provided to build your own image of the application, to do so run -
 
@@ -155,7 +155,7 @@ docker run -p 8080:8051 -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_P
 Run the application on localhost:8080 on your web browser.
 
 
-#### **c. Kubernetes Deployment**
+### **c. Kubernetes Deployment**
 
 A Kubernetes deployment file is provided to host your application on a K8s cluster -
 
@@ -180,11 +180,11 @@ Access the application using the external IP of the load balancer service on you
 
 Prometheus and Grafana are used to monitor the performance of the deployed model and application. For this application, I've just visualised the inferencing latency, but there are many [other](https://kserve.github.io/website/latest/modelserving/observability/prometheus_metrics/) metrics than can be visualised.
 
-#### 1. Enable Prometheus Metrics
+### 1. Enable Prometheus Metrics
 
 On adding the `serving.kserve.io/enable-prometheus-scraping: "true"` annotation to the InferenceService YAML, the kserve container exports it's custom metrics to the prometheus server, which can be visualised on a Grafana Dashboard.
 
-#### 2. Setup Prometheus
+### 2. Setup Prometheus
 
 Follow the Kserve [guide](https://github.com/kserve/kserve/tree/master/docs/samples/metrics-and-monitoring) to setup Prometheus using the Prometheus Operator
 
@@ -203,7 +203,7 @@ To measure the model requests, inference the llama model from the application, t
 </div>
 
 
-#### 3. Setup Grafana
+### 3. Setup Grafana
 
 The captured prometheus metrics can be visualised better on Grafana, follow the Grafana installation [guide](https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/) to install and configure Grafana on your Kubernetes cluster
 

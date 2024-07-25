@@ -24,6 +24,12 @@ with Kserve for high concurrency, monitored using Prometheus and implemented on 
 
 ## Architecture Overview
 
+<div align = "center">
+<kbd>
+<img src="media/arch.jpg" alt="alt text"/>
+</kbd>
+</div>
+<br>
 This Project consists of 3 main components - 
 
 ### 1. Model Inferencing
@@ -53,7 +59,7 @@ To enable prometheus metrics, add the annotation `serving.kserve.io/enable-prome
 
 ## Prerequisites
 
-- Kubernetes Cluster (recommend 16 cpu x 64 Gb RAM x 1 Nvidia GPU per worker node )
+- Kubernetes Cluster (recommended 16 cpu x 64 Gb RAM x 1 Nvidia GPU per worker node )
 - Python 3.9+
 
 ## KServe
